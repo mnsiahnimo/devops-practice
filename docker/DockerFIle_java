@@ -1,0 +1,19 @@
+# Base image with JDK
+FROM openjdk:17-jdk-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy jar file (after Maven/Gradle build)
+COPY target/myapp.jar app.jar
+
+# Expose port
+EXPOSE 8080
+
+# Run the app
+CMD ["java", "-jar", "app.jar"]
+
+
+# Build and run the Docker image
+# docker build -t spring-app:v1 .
+# docker run -d -p 8080:8080 spring-app:v1
