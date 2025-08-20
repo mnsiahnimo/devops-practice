@@ -1,0 +1,48 @@
+
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: medical_db
+    restart: always
+    environment:
+      POSTGRES_DB: medical_app
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: securepassword
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: medical_app
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: medical_app
+      DB_USER: app_user
+      DB_PASSWORD: securepassword
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    command: >
+      gunicorn --bind 0.0.0.0:8000 --workers 4 app:app
+
+volumes:
+  db_data:
+
+
+# This lets you test real database connections before pushing code to AWS EC2 via your CI/CD pipeline.
+#
+# db service runs PostgreSQL and stores its data in a named volume (db_data),
+# so it persists between container restarts.
+#
+# app service builds your Dockerfile (the one we just made), connects to the db
+# service via the hostname "db" (Docker Compose internal network),
+# and runs the Flask app via Gunicorn.
+#
+# Both services run on a shared Docker network created automatically by Compose.
