@@ -36,13 +36,13 @@ volumes:
   db_data:
 
 
-# This lets you test real database connections before pushing code to AWS EC2 via your CI/CD pipeline.
-#
+# This lets you test real database connections before pushing code to AWS EC2 via the CI/CD pipeline.
+
 # db service runs PostgreSQL and stores its data in a named volume (db_data),
 # so it persists between container restarts.
-#
+
 # app service builds your Dockerfile (the one we just made), connects to the db
 # service via the hostname "db" (Docker Compose internal network),
 # and runs the Flask app via Gunicorn.
-#
+
 # Both services run on a shared Docker network created automatically by Compose.
